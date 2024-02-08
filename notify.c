@@ -10,7 +10,7 @@
 // notify sends a desktop notification according to the
 // Desktop Notifications Specification
 // (https://developer.gnome.org/notification-spec/).
-void notify(sd_bus* bus, const char* summary, const char* body, int urgency)
+void notify(sd_bus* bus, const char* summary, const char* body)
 {
     sd_bus_message* m = NULL;
     debug("sending d-bus desktop notification on user bus: ");
@@ -30,8 +30,8 @@ void notify(sd_bus* bus, const char* summary, const char* body, int urgency)
         summary, // STRING summary
         body, // STRING body
         0, // ARRAY actions
-        1, "urgency", max(min(urgency, 2) 0), // DICT hints
-        -1 // INT32 expire_timeout
+        2, "urgency", 2, "resident", true, // DICT hints
+        1000 // INT32 expire_timeout
     );
     if (ret < 0) {
         fprintf(stderr, "sd_bus_message_append: %s\n", strerror(-ret));
